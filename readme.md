@@ -1,11 +1,15 @@
 # Frisch’s planck layout (Mac)
 
 This is a layout for the grid planck.
-Needs to be placed in the right place, besides the other planck keymaps in the qmk_firmware folder:
-	https://github.com/qmk/qmk_firmware
-
 Intended for use on a macbook.
-Macs have slightly different keymaps for certain things, why this layout needs tweaking if used on win/linux.
+Macs have slightly different keymaps for characters and effects, and so this layout needs tweaking if used on win/linux.
+
+This is not a stand-alone folder. It depends on the qmk-firmware (https://github.com/qmk/qmk_firmware)
+Clone that and place this files in a folder under the planck keymaps.
+
+Build instructions: https://docs.qmk.fm/build-compile-instructions
+Flashing instructions: https://docs.qmk.fm/flashing-firmware
+
 
 ```
 /* BASE
@@ -26,9 +30,9 @@ Macs have slightly different keymaps for certain things, why this layout needs t
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      | home | pgdn | end  |      |      | Left | Down | Right| >><< |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |      |      |      |      |      |      |      |
+ * | Shift|      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |      |      |      |      |      |      |      |
+ * | func | Ctrl |  Alt |  Cmd |      |      |      |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
 
@@ -58,11 +62,11 @@ Macs have slightly different keymaps for certain things, why this layout needs t
 
 /* SYMB
  * ,-----------------------------------------------------------------------------------.
- * |      |      |  ^   |  {   |  }   |      |      |  &   |  \   |  =   |  `   |      |
+ * |      |      |  ?   |  {   |  }   |      |      |  &   |  \   |  =   |  `   |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |  |   |  [   |  ]   |      |      |  $   |  %   |  #   |  '   |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |  (   |  )   |      |      |  !   |  @   |  £   |  ~   |      |
+ * |      |      |  ^   |  (   |  )   |      |      |  !   |  @   |  £   |  ~   |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |delete|delete| >><< |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
@@ -82,13 +86,13 @@ Macs have slightly different keymaps for certain things, why this layout needs t
 
 /* FUNC
  * ,-----------------------------------------------------------------------------------.
- * |      |      |      |      |      |      |      | vol+ |  F7  |  F8  |  F9  |  F12 |
+ * |      |      |      |      | vol+ |      |      |  F7  |  F8  |  F9  |  F10 |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |      |      | vol- |  F4  |  F5  |  F6  |  F11 |
+ * |      |      |      |      | vol- |      |      |  F4  |  F5  |  F6  |  F11 |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |      |      | mute |  F1  |  F2  |  F3  |  F10 |
+ * | Shift|      |      |      | mute |      |      |  F1  |  F2  |  F3  |  F12 |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | >><< |      |      |      | prev |  play/pause | next |      |      |      | >><< |
+ * | >><< | Ctrl |  Alt |  Cmd | prev |  play/pause | next |      |      |      | >><< |
  * `-----------------------------------------------------------------------------------'
  */
 ```
