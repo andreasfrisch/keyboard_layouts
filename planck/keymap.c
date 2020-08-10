@@ -20,27 +20,32 @@ extern keymap_config_t keymap_config;
 #define _______ KC_TRNS
 #define ___X___ KC_NO
 
+#define UK_HASH KC_NUHS
+#define UK_BSLS KC_NUBS
+#define UK_AT S(KC_QUOT)
+#define UK_PND S(KC_3)
+#define UK_QSTM S(KC_SLSH)
+#define UK_PIPE S(UK_BSLS)
+#define UK_TILD S(UK_HASH)
+#define UK_DQUO S(KC_2)
+
 enum unicode_names {
-	CAP_AE,
-	CAP_OE,
-	CAP_AA,
-	LOW_AE,
 	LOW_OE,
-	LOW_AA
+	CAP_OE,
+	LOW_AE,
+	CAP_AE,
+	LOW_AA,
+	CAP_AA
 };
 
 const uint32_t PROGMEM unicode_map[] = {
-	[CAP_AE] = 0x00C6,
-	[CAP_OE] = 0x00D8,
-	[CAP_AA] = 0x00C5,
-	[LOW_AE] = 0x00E6,
-	[LOW_OE] = 0x00F8,
-	[LOW_AA] = 0x00E5,
+    [LOW_OE]  = 0x00F8,
+    [CAP_OE] = 0x00D8,
+    [LOW_AE]  = 0x00E6,
+    [CAP_AE] = 0x00C6,
+    [LOW_AA]  = 0x00E5,
+    [CAP_AA] = 0x00C5,
 };
-
-void matrix_init_user(void) {
-	set_unicode_input_mode(UC_LNX);
-}
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -106,7 +111,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_NUMB] = {
   {_______, _______, _______, _______, _______, _______, _______, KC_7   , KC_8   , KC_9   , KC_PLUS, _______},
-  {_______, _______, XP(LOW_AE,CAP_AE), XP(LOW_OE,CAP_OE), XP(LOW_AA,CAP_AA), _______, _______, KC_4   , KC_5   , KC_6   , KC_MINS, _______},
+  {_______, _______, XP(LOW_AE, CAP_AE), XP(LOW_OE, CAP_OE), XP(LOW_AA, CAP_AA), _______, _______, KC_4, KC_5, KC_6, KC_MINS, _______},
   {_______, _______, _______, _______, _______, _______, _______, KC_1   , KC_2   , KC_3   , KC_ASTR, _______},
   {_______, _______, _______, _______, _______, KC_BSPC, KC_BSPC, ___X___, KC_0   , KC_DOT , KC_SLSH, _______}
 },
@@ -144,9 +149,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
 [_SYMB] = {
-  {_______, _______, ACTION_MODS_KEY(MOD_LSFT, KC_SLSH), KC_LCBR, KC_RCBR, _______, _______, KC_AMPR, KC_BSLS, KC_EQL , KC_GRV , _______},
-  {_______, _______, KC_PIPE, KC_LBRC, KC_RBRC, _______, _______, KC_DLR , KC_PERC, _______, KC_QUOT, _______},
-  {_______, _______, KC_CIRC, KC_LPRN, KC_RPRN, _______, _______, KC_EXLM, KC_AT  , KC_HASH, KC_TILD, _______},
+  {_______, _______, UK_QSTM, KC_LCBR, KC_RCBR, _______, _______, KC_AMPR, UK_BSLS, KC_EQL , KC_GRV , _______},
+  {_______, _______, UK_PIPE, KC_LBRC, KC_RBRC, _______, _______, KC_DLR , KC_PERC, UK_HASH, KC_QUOT, UK_DQUO},
+  {_______, _______, KC_CIRC, KC_LPRN, KC_RPRN, _______, _______, KC_EXLM, UK_AT  , UK_PND , UK_TILD, _______},
   {_______, _______, _______, _______, ___X___, KC_DEL , KC_DEL , _______, _______, _______, _______, _______}
 },
 
