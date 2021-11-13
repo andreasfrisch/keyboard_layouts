@@ -1,4 +1,7 @@
 #include QMK_KEYBOARD_H
+#include "action_layer.h"
+#include "action_tapping.h"
+#include "eeconfig.h"
 
 extern keymap_config_t keymap_config;
 
@@ -22,6 +25,33 @@ extern uint8_t is_master;
 #define _______ KC_TRNS
 #define ___X___ KC_NO
 
+#define UK_HASH KC_NUHS
+#define UK_BSLS KC_NUBS
+#define UK_AT S(KC_QUOT)
+#define UK_PND S(KC_3)
+#define UK_QSTM S(KC_SLSH)
+#define UK_PIPE S(UK_BSLS)
+#define UK_TILD S(UK_HASH)
+#define UK_DQUO S(KC_2)
+
+enum unicode_names {
+▸   LOW_OE,
+▸   CAP_OE,
+▸   LOW_AE,
+▸   CAP_AE,
+▸   LOW_AA,
+▸   CAP_AA
+};
+
+const uint32_t PROGMEM unicode_map[] = {
+    [LOW_OE]  = 0x00F8,
+    [CAP_OE] = 0x00D8,
+    [LOW_AE]  = 0x00E6,
+    [CAP_AE] = 0x00C6,
+    [LOW_AA]  = 0x00E5,
+    [CAP_AA] = 0x00C5,
+};
+
 enum custom_keycodes {
   BASE = SAFE_RANGE,
   MOVE,
@@ -37,7 +67,7 @@ enum macro_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_BASE] = LAYOUT( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_ESC,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,\
+       KC_ESC,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,   FUNC  ,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
        KC_TAB,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L,    MOVE,  KC_ENT,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -56,7 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX \
+                                          KC_LGUI, XXXXXXX, XXXXXXX,   KC_RCTRL, XXXXXXX, XXXXXXX \
                                       //`--------------------------'  `--------------------------'
     ),
 
@@ -64,11 +94,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, KC_7, KC_8, KC_9, KC_PLUS, KC_ASTR,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, KC_4, KC_5, KC_6, KC_MINS, KC_SLSH,\
+      XXXXXXX, XXXXXXX, XP(LOW_AE,CAP_AE), XP(LOW_OE,CAP_OE), XP(LOW_AA,CAP_AA), XXXXXXX,                      XXXXXXX, KC_4, KC_5, KC_6, KC_MINS, KC_SLSH,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, KC_1, KC_2, KC_3,  KC_DOT, XXXXXXX,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          XXXXXXX, XXXXXXX, KC_BSPC,    XXXXXXX, XXXXXXX, KC_0 \
+                                          KC_LGUI, XXXXXXX, XXXXXXX,    KC_BSPC, XXXXXXX, KC_0 \
                                       //`--------------------------'  `--------------------------'
     ),
 
@@ -76,17 +106,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       XXXXXXX, XXXXXXX, XXXXXXX, KC_LCBR, KC_RCBR, XXXXXXX,                      XXXXXXX, KC_AMPR, KC_BSLS,  KC_EQL,  KC_GRV, XXXXXXX,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, KC_PIPE, KC_LBRC, KC_RBRC, XXXXXXX,                      KC_HASH,  KC_DLR, KC_PERC, XXXXXXX, KC_QUOT, XXXXXXX,\
+      XXXXXXX, XXXXXXX, KC_PIPE, KC_LBRC, KC_RBRC, XXXXXXX,                      KC_HASH,  KC_DLR, KC_PERC, UK_HASH, KC_QUOT, UK_DQUO,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, KC_CIRC, KC_LPRN, KC_RPRN, XXXXXXX,                      KC_TILD, KC_EXLM,   KC_AT, XXXXXXX, XXXXXXX, XXXXXXX,\
+      XXXXXXX, XXXXXXX, KC_CIRC, KC_LPRN, KC_RPRN, XXXXXXX,                      XXXXXXX, KC_EXLM,   UK_AT, UK_PND , UK_TILD, XXXXXXX,\
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX \
+                                          XXXXXXX, XXXXXXX, KC_DEL ,    XXXXXXX, XXXXXXX, XXXXXXX \
                                       //`--------------------------'  `--------------------------'
     ),
 
   [_FUNC] = LAYOUT( \
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,                      XXXXXXX,   KC_F7,   KC_F8,   KC_F9,  KC_F10, XXXXXXX,\
+      RESET  , XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,                      XXXXXXX,   KC_F7,   KC_F8,   KC_F9,  KC_F10, XXXXXXX,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLD,                      XXXXXXX,   KC_F4,   KC_F5,   KC_F6,  KC_F11, XXXXXXX,\
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -97,7 +127,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     )
 };
 
-int RGB_current_mode;
+int RGB_current_mode
 
 void persistent_default_layer_set(uint16_t default_layer) {
   eeconfig_update_default_layer(default_layer);

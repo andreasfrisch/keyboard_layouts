@@ -13,8 +13,7 @@ extern keymap_config_t keymap_config;
 #define _SYMB 2
 #define _FUNC 3
 #define _NUMB 4
-#define _SYST 5
-#define _MOUS 6
+#define _MOUS 5
 
 // Fillers to make layering more clear
 #define _______ KC_TRNS
@@ -36,6 +35,33 @@ enum unicode_names {
 	CAP_AE,
 	LOW_AA,
 	CAP_AA
+};
+
+enum custom_keycodes {
+    COMPAA = SAFE_RANGE,
+    COMPOE,
+    COMPAE,
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+    case COMPAA:
+        if (record->event.pressed) {
+            SEND_STRING(SS_RALT("aa"));
+        }
+        break;
+    case COMPOE:
+        if (record->event.pressed) {
+            SEND_STRING(SS_RALT("oe"));
+        }
+        break;
+    case COMPAE:
+        if (record->event.pressed) {
+            SEND_STRING(SS_RALT("ae"));
+        }
+        break;
+    }
+    return true;
 };
 
 const uint32_t PROGMEM unicode_map[] = {
@@ -64,20 +90,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* BASE
  * ,-----------------------------------------------------------------------------------.
- * | esc  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | syst |
+ * | esc  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | RAlt |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | tab  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  | move | Ent  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   ;  | Shift|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | func | Ctrl |  Alt |  Cmd | numb | Space|Space | symb |  Cmd |  Alt | Ctrl | func |
+ * | func | Ctrl |  Alt |  Cmd | numb | Space|Space | symb |  Cmd |      | Ctrl | func |
  * `-----------------------------------------------------------------------------------'
  */
 [_BASE] = {
-  {KC_ESC   , KC_Q   , KC_W   , KC_E   , KC_R     , KC_T  , KC_Y  , KC_U     , KC_I   , KC_O   , KC_P     , MO(_SYST) },
+  {KC_ESC   , KC_Q   , KC_W   , KC_E   , KC_R     , KC_T  , KC_Y  , KC_U     , KC_I   , KC_O   , KC_P     , KC_RALT   },
   {KC_TAB   , KC_A   , KC_S   , KC_D   , KC_F     , KC_G  , KC_H  , KC_J     , KC_K   , KC_L   , MO(_MOVE), KC_ENT    },
   {KC_LSFT  , KC_Z   , KC_X   , KC_C   , KC_V     , KC_B  , KC_N  , KC_M     , KC_COMM, KC_DOT , KC_SCLN  , KC_RSFT   },
-  {MO(_FUNC), KC_LCTL, KC_LALT, KC_LGUI, MO(_NUMB), KC_SPC, KC_SPC, MO(_SYMB), KC_RGUI, KC_RALT, KC_RCTL  , MO(_FUNC) }
+  {MO(_FUNC), KC_LCTL, KC_LALT, KC_LGUI, MO(_NUMB), KC_SPC, KC_SPC, MO(_SYMB), KC_RGUI, ___X___, KC_RCTL  , MO(_FUNC) }
 },
 
 /* MOVE
@@ -110,28 +136,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_NUMB] = {
-  {_______, _______, _______, _______, _______, _______, _______, KC_7   , KC_8   , KC_9   , KC_PLUS, _______},
-  {_______, _______, XP(LOW_AE, CAP_AE), XP(LOW_OE, CAP_OE), XP(LOW_AA, CAP_AA), _______, _______, KC_4, KC_5, KC_6, KC_MINS, _______},
+  {_______, KC_PLUS, KC_MINS, KC_ASTR, KC_SLSH, _______, _______, KC_7   , KC_8   , KC_9   , KC_PLUS, _______},
+  {_______, UK_HASH, COMPAE , COMPOE , COMPAA , _______, _______, KC_4, KC_5, KC_6, KC_MINS, _______},
   {_______, _______, _______, _______, _______, _______, _______, KC_1   , KC_2   , KC_3   , KC_ASTR, _______},
   {_______, _______, _______, _______, _______, KC_BSPC, KC_BSPC, ___X___, KC_0   , KC_DOT , KC_SLSH, _______}
-},
-
-/* SYSTEMS LAYER
- * ,-----------------------------------------------------------------------------------.
- * |      |      |      |      |      |      |      |      |      |      |      | >><< |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |      |      |      |      |      |      |      |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |      |      |      |      |      |      |      |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | RESET|      |      |      | mouse|      |      |      |      |      |      |      |
- * `-----------------------------------------------------------------------------------'
- */
-[_SYST] = {
-  {_______, _______, _______, _______, _______   , _______, _______, _______, _______, _______, _______, _______},
-  {_______, _______, _______, _______, _______   , _______, _______, _______, _______, _______, _______, _______},
-  {_______, _______, _______, _______, _______   , _______, _______, _______, _______, _______, _______, _______},
-  { RESET , _______, _______, _______, TG(_MOUS) , _______, _______, _______, _______, _______, _______, _______}
 },
 
 
@@ -167,15 +175,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_MOUS] = {
-  {KC_ESC , ___X___, KC_ACL2, KC_ACL1, KC_ACL0   , ___X___, ___X___, KC_WH_L, KC_MS_U, KC_WH_R, ___X___, _______},
-  {___X___, ___X___, KC_BTN3, KC_BTN2, KC_BTN1   , ___X___, ___X___, KC_MS_L, KC_MS_D, KC_MS_R, ___X___, ___X___},
-  {_______, ___X___, ___X___, ___X___, ___X___   , ___X___, ___X___, KC_WH_D, KC_WH_U, ___X___, ___X___, _______},
-  {_______, _______, _______, ___X___, TG(_MOUS) , _______, _______, _______, _______, _______, _______, _______}
+  {TG(_MOUS), ___X___, KC_ACL2, KC_ACL1, KC_ACL0, ___X___, ___X___, KC_WH_L, KC_MS_U, KC_WH_R, ___X___, _______},
+  { ___X___ , ___X___, KC_BTN3, KC_BTN2, KC_BTN1, ___X___, ___X___, KC_MS_L, KC_MS_D, KC_MS_R, ___X___, ___X___},
+  { _______ , ___X___, ___X___, ___X___, ___X___, ___X___, ___X___, KC_WH_D, KC_WH_U, ___X___, ___X___, _______},
+  { _______ , _______, _______, ___X___, _______, _______, _______, _______, _______, _______, _______, _______}
 },
 
 /* FUNC
  * ,-----------------------------------------------------------------------------------.
- * |      |      |      |      | vol+ |      |      |  F7  |  F8  |  F9  |  F10 |      |
+ * | mouse|      |      |      | vol+ |      |      |  F7  |  F8  |  F9  |  F10 | Reset|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      | vol- |      |      |  F4  |  F5  |  F6  |  F11 |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -185,9 +193,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_FUNC] = {
-  {_______, _______, _______, _______, KC_VOLU, _______, _______, KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______},
-  {_______, _______, _______, _______, KC_VOLD, _______, _______, KC_F4  , KC_F5  , KC_F6  , KC_F11 , _______},
-  {KC_LSFT, _______, _______, _______, KC_MUTE, _______, _______, KC_F1  , KC_F2  , KC_F3  , KC_F12 , _______},
-  {_______, KC_LCTL, KC_LALT, KC_LGUI, KC_MPRV, KC_MPLY, KC_MPLY, KC_MNXT, _______, _______, _______, _______}
+  {TG(_MOUS), _______, _______, _______, KC_VOLU, _______, _______, KC_F7  , KC_F8  , KC_F9  , KC_F10 ,  RESET },
+  { _______ , _______, _______, _______, KC_VOLD, _______, _______, KC_F4  , KC_F5  , KC_F6  , KC_F11 , _______},
+  { KC_LSFT , _______, _______, _______, KC_MUTE, _______, _______, KC_F1  , KC_F2  , KC_F3  , KC_F12 , _______},
+  { _______ , KC_LCTL, KC_LALT, KC_LGUI, KC_MPRV, KC_MPLY, KC_MPLY, KC_MNXT, _______, _______, _______, _______}
 }
 };
